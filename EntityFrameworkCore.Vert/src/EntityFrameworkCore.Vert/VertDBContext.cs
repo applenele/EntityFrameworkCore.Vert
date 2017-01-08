@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EntityFrameworkCore.Vert
 {
-    public class VertDBContext : DbContext
+    public class VertDBContext : DbContext 
     {
         private List<string> connectionStringList;
 
@@ -19,7 +19,6 @@ namespace EntityFrameworkCore.Vert
 
         public VertDBContext()
         {
-
         }
 
         public VertDBContext(int index)
@@ -30,9 +29,12 @@ namespace EntityFrameworkCore.Vert
             connectionStringList =  connections.Select(x=>x.ConnectString).ToList();
         }
 
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(connectionStringList[connIndex]);
         }
+
+        
     }
 }
