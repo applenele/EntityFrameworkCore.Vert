@@ -11,9 +11,11 @@ using System.Threading.Tasks;
 
 namespace EntityFrameworkCore.Vert
 {
-    public class VertDBContext : DbContext 
+    public class VertDBContext : DbContext
     {
-        private List<string> connectionStringList;
+        private static List<string> connectionStringList = new ServiceCollection().
+            AddOptions().Configure<List<ConnectionModel>>(ConfigurationHelper.GetConfiguration("appsettings.json").GetSection("ConnectionStrings"))
+            .BuildServiceProvider().GetService<IOptions<List<ConnectionModel>>>().Value.Select(x => x.ConnectString).ToList();
 
         private int connIndex = 0;
 
@@ -21,20 +23,16 @@ namespace EntityFrameworkCore.Vert
         {
         }
 
-        public VertDBContext(int index)
+        public VertDBContext(int index = 0)
         {
             connIndex = index;
-            IConfiguration config = ConfigurationHelper.GetConfiguration("appsettings.json");
-            List<ConnectionModel> connections = new ServiceCollection().AddOptions().Configure<List<ConnectionModel>>(config.GetSection("connectionStrings")).BuildServiceProvider().GetService<IOptions<List<ConnectionModel>>>().Value;
-            connectionStringList =  connections.Select(x=>x.ConnectString).ToList();
         }
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(connectionStringList[connIndex]);
         }
 
-        
+
     }
 }

@@ -16,7 +16,7 @@ namespace Vert.Test
             
         }
 
-        public DB(int index) : base(index)
+        public DB(int index=0) : base(index)
         {
 
         }

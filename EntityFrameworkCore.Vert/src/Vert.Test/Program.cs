@@ -10,18 +10,21 @@ namespace Vert.Test
     {
         public static void Main(string[] args)
         {
-            //DB context = new DB(1);
-            //Person person = new Person { UserName = "test" };
-            //context.Add(person);
-            //context.SaveChanges();
-
             VertContext<DB> context = new VertContext<DB>();
-            VertDBContext db1 = context.UseDB(0);
-            VertDBContext db2 = context.UseDB(1);
-            List<Person> personList1 = db1.Set<Person>().ToList();
-            List<Person> personList11 = db1.Set<Person>().ToList();
-            List<Person> personList2 = db2.Set<Person>().ToList();
-            List<Person> personList22 = db2.Set<Person>().ToList();
+            DB db1 = context.UseDB(0);
+            DB db2 = context.UseDB(1);
+            //List<Person> personList1 = db1.Set<Person>().ToList();
+            //List<Person> personList11 = db1.Set<Person>().ToList();
+            //List<Person> personList2 = db2.Set<Person>().ToList();
+            //List<Person> personList22 = db2.Set<Person>().ToList();
+
+            db1.Persons.Add(new Person { UserName = "db1" });
+ 
+            db2.Persons.Add(new Person { UserName = "db2" });
+
+            context.SaveChanges();
+
+            context.Dispose();
         }
     }
 }
